@@ -30,7 +30,7 @@ RUN tar -xzf /tmp/excalibur.tar.gz --strip-components=1 -C /app \
  && uv sync --frozen --no-dev \
  && uv pip install --python /app/.venv/bin/python --require-hashes -r /tmp/requirements-extra.txt \
  && rm -r /root/.cache /tmp/requirements-extra.txt \
- && rm -r /app/excalibur/www/static/uploads \
+ && { [ ! -e /app/excalibur/www/static/uploads ] || rm -r /app/excalibur/www/static/uploads; } \
  && ln -s /data/uploads /app/excalibur/www/static/uploads \
  && useradd --uid 1000 --home-dir /data --no-create-home --shell /usr/sbin/nologin excalibur \
  && /app/.venv/bin/python -c "import excalibur, waitress; print(excalibur.__version__)" | grep -qx "${EXCALIBUR_VERSION}"
